@@ -170,6 +170,7 @@ p { margin: 0 0 14px; }
   max-width: 40em;
 }
 .caption strong { color: var(--text); font-weight: 600; }
+.visits { font-family: var(--mono); font-size: 0.78rem; margin-top: 10px; }
 
 /* ---------- milestone ---------- */
 .milestone {

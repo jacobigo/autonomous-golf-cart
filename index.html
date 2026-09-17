@@ -63,6 +63,7 @@
       <p class="caption muted">
         Next up: speed control and RTK&nbsp;GPS at the test site.
       </p>
+      <p class="caption muted visits" id="visits" hidden></p>
     </div>
   </section>
 
@@ -274,6 +275,30 @@
     <a href="https://jacobigo.github.io/my-portfolio/">Portfolio</a>
   </p>
 </footer>
+
+<!-- Visitor counting. Fill in SITE below, and uncomment the tag, to start counting.
+<script data-goatcounter="https://MYCODE.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+-->
+<script>
+(function () {
+  var SITE = '';                          // GoatCounter code; empty = nothing renders
+  var PATH = '/autonomous-golf-cart/';
+  var SINCE = '';                         // e.g. 'September 2026'
+  var MIN_VISITS = 50;                    // stay hidden until it is worth showing
+  if (!SITE) return;
+
+  fetch('https://' + SITE + '.goatcounter.com/counter' + PATH + '.json')
+    .then(function (r) { return r.ok ? r.json() : Promise.reject(r.status); })
+    .then(function (d) {
+      var n = Number(String(d.count).replace(/\D/g, ''));
+      if (n < MIN_VISITS) return;
+      var el = document.getElementById('visits');
+      el.textContent = n.toLocaleString() + ' visits' + (SINCE ? ' since ' + SINCE : '');
+      el.hidden = false;
+    })
+    .catch(function () {});
+})();
+</script>
 
 </body>
 </html>
