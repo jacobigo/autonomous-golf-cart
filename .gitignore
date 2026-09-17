@@ -1,0 +1,4 @@
+.DS_Store
+# Raw media stays out of the repo; commit only compressed web versions.
+raw/
+*.mov

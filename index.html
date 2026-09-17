@@ -1,0 +1,305 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Autonomous Golf Cart</title>
+  <meta name="description" content="An open, low-cost drive-by-wire retrofit of a Yamaha G22E golf cart — a research platform for sim-to-real autonomy. MS thesis, Arizona State University.">
+  <meta property="og:title" content="Autonomous Golf Cart">
+  <meta property="og:description" content="A low-cost drive-by-wire research platform for sim-to-real autonomy.">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="https://jacobigo.github.io/autonomous-golf-cart/assets/golfcart.jpg">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🚗</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap">
+    <h1>Autonomous Golf Cart</h1>
+    <p class="subtitle">A low-cost drive-by-wire research platform for sim-to-real autonomy</p>
+
+    <p class="authors">
+      <a href="https://jacobigo.github.io/my-portfolio/">Jacob Igo</a>
+    </p>
+    <p class="affil">Arizona State University</p>
+    <p class="affil">MS Computer Science Thesis - Work in Progress</p>
+
+    <nav class="links" aria-label="Page links">
+      <a class="btn" href="#demo"><span aria-hidden="true">▶</span> Video</a>
+      <a class="btn" href="#progress"><span aria-hidden="true">◷</span> Progress</a>
+      <span class="btn btn-disabled" title="The code and design docs are released with the thesis">
+        <span aria-hidden="true">&lt;/&gt;</span> Code · released with thesis
+      </span>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- ============ DEMO ============ -->
+  <section id="demo" class="teaser">
+    <video controls muted playsinline preload="metadata" poster="assets/dbw_demo-poster.jpg"
+           aria-label="Demo: the cart's wheels turning under software command">
+      <source src="assets/dbw_demo.mp4" type="video/mp4">
+    </video>
+
+    <div class="teaser-text">
+      <aside class="milestone" aria-label="Latest milestone">
+        <span class="milestone-tag">Latest milestone</span>
+        <p>
+          The software stack now controls the throttle of a real golf cart, and three
+          failsafes stopped the wheels while they were turning.
+        </p>
+      </aside>
+      <p class="caption">
+        <strong>First drive-by-wire, September 12, 2026.</strong> A command typed on the
+        laptop turns the wheels at about 1&nbsp;m/s, with the cart on jackstands.
+      </p>
+      <p class="caption muted">
+        Next up: speed control and RTK&nbsp;GPS at the test site.
+      </p>
+    </div>
+  </section>
+
+  <!-- ============ OVERVIEW ============ -->
+  <section>
+    <h2>Overview</h2>
+    <p>
+      Self-driving research vehicles are expensive, and most of them are closed. This project
+      turns a used <strong>Yamaha G22E</strong> electric golf cart into an autonomous research
+      platform built from off-the-shelf parts. It adds a software-controlled
+      <em>drive-by-wire</em> layer to the cart without changing how it drives for a person
+      behind the wheel.
+    </p>
+    <p>
+      The cart serves as the physical end of a <strong>sim-to-real</strong> study. The same
+      autonomy stack runs against a simulated vehicle, then against real actuation hardware on
+      a desk, then on the cart itself. The question is how the real actuation chain's delays,
+      quantization and failure modes change what the vehicle actually does.
+    </p>
+  </section>
+
+  <!-- ============ SYSTEM ============ -->
+  <section>
+    <h2>System</h2>
+    <p>
+      A strict split keeps the safety-critical parts simple. Linux computers are fast on
+      average but can stall unpredictably, so the Linux computer only plans. A bare-metal
+      microcontroller handles every electrical connection to the cart and enforces limits.
+      Relays sit underneath everything and fall back to stock wiring whenever power is lost.
+    </p>
+
+    <figure class="diagram" aria-label="System architecture">
+      <div class="pipeline">
+        <div class="node">
+          <span class="node-kicker">Plan</span>
+          <span class="node-title">Raspberry Pi</span>
+          <span class="node-body">ROS 2 Jazzy</span>
+        </div>
+        <div class="edge"><span>USB serial</span></div>
+        <div class="node">
+          <span class="node-kicker">Act</span>
+          <span class="node-title">Teensy 4.1</span>
+          <span class="node-body">Watchdog · slew limits</span>
+        </div>
+        <div class="edge"><span>SPI</span></div>
+        <div class="node">
+          <span class="node-kicker">Inject</span>
+          <span class="node-title">Digital pot</span>
+          <span class="node-body">Stands in for the pedal sensor</span>
+        </div>
+        <div class="edge"><span>relay</span></div>
+        <div class="node node-stock">
+          <span class="node-kicker">Stock</span>
+          <span class="node-title">Motor controller</span>
+          <span class="node-body">Unmodified</span>
+        </div>
+      </div>
+
+      <div class="planned">
+        <span class="planned-label">Planned</span>
+        <span class="chip">RTK GPS</span>
+        <span class="chip">Perception</span>
+        <span class="chip">Steering actuator</span>
+        <span class="chip">Brake actuator</span>
+        <span class="chip">Hardwired e-stop</span>
+      </div>
+      <figcaption>
+        Throttle path as built. The digital potentiometer imitates the cart's original
+        resistive pedal sensor, so the stock controller sees exactly the signal it expects.
+        When the relays lose power they drop out, and the cart goes back to its own pedal.
+      </figcaption>
+    </figure>
+  </section>
+
+  <!-- ============ FAILSAFES ============ -->
+  <section>
+    <h2>Failsafes, tested with the wheels turning</h2>
+    <p>
+      The relay cut and the watchdog were both proven on the bench before going on the cart.
+      On the cart, all three failsafes were triggered while the wheels were spinning under
+      software command, and each one stopped them. That was also the first time the
+      accelerator interlock had been tested at all.
+    </p>
+    <div class="cards">
+      <article class="card">
+        <span class="card-num">01</span>
+        <h3>Relay power cut</h3>
+        <p>Cutting relay power drops the throttle injection and hands the throttle back to
+          the stock pedal circuit. No software is involved.</p>
+      </article>
+      <article class="card">
+        <span class="card-num">02</span>
+        <h3>Link lost</h3>
+        <p>Pulling the USB cable mid-command sets off the microcontroller's hardware
+          watchdog, which returns the throttle to rest.</p>
+      </article>
+      <article class="card">
+        <span class="card-num">03</span>
+        <h3>Human interlock</h3>
+        <p>A safety operator holds the accelerator switch closed. When they let go, the
+          stock controller stops the cart, whatever the software is commanding.</p>
+      </article>
+    </div>
+  </section>
+
+  <!-- ============ GALLERY ============ -->
+  <section>
+    <h2>Build</h2>
+    <div class="gallery">
+      <figure>
+        <img src="assets/golfcart.jpg" loading="lazy"
+             alt="White Yamaha G22E golf cart with its rear on a red jackstand, electronics and a laptop on the floorboard">
+        <figcaption>The Yamaha G22E, rigged for its first drive-by-wire test</figcaption>
+      </figure>
+      <figure>
+        <img src="assets/breadboard.jpg" loading="lazy"
+             alt="Breadboard with a Teensy microcontroller, digital potentiometer and relays, wired to a laptop">
+        <figcaption>Bench testing the drive-by-wire electronics</figcaption>
+      </figure>
+      <figure>
+        <img src="assets/jacob_with_golfcart.jpg" loading="lazy"
+             alt="Jacob giving a thumbs up behind the cart, with the breadboard and laptop on the floorboard">
+        <figcaption>Test day</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <!-- ============ PROGRESS ============ -->
+  <section id="progress">
+    <h2>Progress</h2>
+    <p>
+      Hardware comes up one step at a time. Each stage adds one real component to the loop
+      and has to pass before the next one starts.
+    </p>
+
+    <ol class="timeline">
+      <li class="done">
+        <div class="t-date">Aug 24, 2026</div>
+        <div class="t-body">
+          <h3>Stage 0: Software alone</h3>
+          <p>A simulated serial link and a record-and-replay roundtrip, with no hardware attached.</p>
+        </div>
+      </li>
+      <li class="partial">
+        <div class="t-date">Sep 1, 2026</div>
+        <div class="t-body">
+          <h3>Stage 1: Computer ↔ microcontroller</h3>
+          <p>The link works, using a custom binary protocol with CRC framing. Fault handling,
+            including the hardware watchdog, was measured on the real board. The remaining
+            fault cases can only be tested in later stages.</p>
+        </div>
+      </li>
+      <li class="done">
+        <div class="t-date">Sep 1, 2026</div>
+        <div class="t-body">
+          <h3>Stage 2: Signal injection</h3>
+          <p>The microcontroller drives the digital potentiometer, checked against a meter.
+            First end-to-end command from ROS to the output.</p>
+        </div>
+      </li>
+      <li class="done">
+        <div class="t-date">Sep 9, 2026</div>
+        <div class="t-body">
+          <h3>Stage 3: Controller on the bench</h3>
+          <p>A resistor rig simulated the cart's controller on the bench, and every acceptance
+            criterion was measured and passed.</p>
+        </div>
+      </li>
+      <li class="done highlight">
+        <div class="t-date">Sep 12, 2026</div>
+        <div class="t-body">
+          <h3>Stage 4: On the cart</h3>
+          <p>With the cart on jackstands, the wheels turned under software command. All three
+            failsafes stopped them mid-motion, and afterward the cart was put back to stock.</p>
+        </div>
+      </li>
+      <li class="next">
+        <div class="t-date">Up next</div>
+        <div class="t-body">
+          <h3>Commanded speed + RTK GPS</h3>
+          <p>Closed-loop speed control on jackstands, then centimeter-level positioning at the
+            test site. Both are required before the cart moves under its own control.</p>
+        </div>
+      </li>
+      <li class="future">
+        <div class="t-date">Later</div>
+        <div class="t-body">
+          <h3>Steering, braking, autonomy</h3>
+          <p>Steering and brake actuators, a hardwired e-stop, and then the full autonomy stack
+            on the cart.</p>
+        </div>
+      </li>
+    </ol>
+  </section>
+
+  <!-- ============ RESEARCH ============ -->
+  <section>
+    <h2>Research: a sim-to-real ladder</h2>
+    <p>
+      The study varies one thing: <strong>how much of the real system is in the loop</strong>.
+      The autonomy stack stays the same while the rest moves step by step from pure simulation
+      to the real vehicle. Comparing neighboring steps shows which part of the gap each layer
+      is responsible for.
+    </p>
+    <div class="table-scroll">
+      <table class="ladder">
+        <thead>
+          <tr><th>Step</th><th>Actuation</th><th>Vehicle</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>0</td><td>None (ideal commands)</td><td>Simulated</td></tr>
+          <tr><td>1</td><td>Modeled</td><td>Simulated</td></tr>
+          <tr><td>2</td><td>Real firmware, run on a PC</td><td>Simulated</td></tr>
+          <tr><td>3</td><td>Real hardware on a desk</td><td>Simulated</td></tr>
+          <tr><td>4</td><td>Real hardware</td><td>The cart</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ============ SAFETY ============ -->
+  <section class="notice">
+    <h2>A note on safety</h2>
+    <p>
+      This is a research platform tested on private property, with a safety operator present
+      and speeds capped. It is not intended for public roads. All testing to date has been
+      done with the drive wheels off the ground.
+    </p>
+  </section>
+
+</main>
+
+<footer class="wrap footer">
+  <p>
+    © 2026 Jacob Igo ·
+    <a href="https://jacobigo.github.io/my-portfolio/">Portfolio</a>
+  </p>
+</footer>
+
+</body>
+</html>
