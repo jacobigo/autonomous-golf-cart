@@ -76,10 +76,8 @@
       behind the wheel.
     </p>
     <p>
-      The cart serves as the physical end of a <strong>sim-to-real</strong> study. The same
-      autonomy stack runs against a simulated vehicle, then against real actuation hardware on
-      a desk, then on the cart itself. The question is how the real actuation chain's delays,
-      quantization and failure modes change what the vehicle actually does.
+      The cart is the physical end of a graduate research project on moving autonomy software
+      from simulation onto real hardware. Everything below is the platform that work runs on.
     </p>
   </section>
 
@@ -255,31 +253,6 @@
         </div>
       </li>
     </ol>
-  </section>
-
-  <!-- ============ RESEARCH ============ -->
-  <section>
-    <h2>Research: a sim-to-real ladder</h2>
-    <p>
-      The study varies one thing: <strong>how much of the real system is in the loop</strong>.
-      The autonomy stack stays the same while the rest moves step by step from pure simulation
-      to the real vehicle. Comparing neighboring steps shows which part of the gap each layer
-      is responsible for.
-    </p>
-    <div class="table-scroll">
-      <table class="ladder">
-        <thead>
-          <tr><th>Step</th><th>Actuation</th><th>Vehicle</th></tr>
-        </thead>
-        <tbody>
-          <tr><td>0</td><td>None (ideal commands)</td><td>Simulated</td></tr>
-          <tr><td>1</td><td>Modeled</td><td>Simulated</td></tr>
-          <tr><td>2</td><td>Real firmware, run on a PC</td><td>Simulated</td></tr>
-          <tr><td>3</td><td>Real hardware on a desk</td><td>Simulated</td></tr>
-          <tr><td>4</td><td>Real hardware</td><td>The cart</td></tr>
-        </tbody>
-      </table>
-    </div>
   </section>
 
   <!-- ============ SAFETY ============ -->
