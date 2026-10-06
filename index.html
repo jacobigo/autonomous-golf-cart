@@ -52,8 +52,8 @@
       <aside class="milestone" aria-label="Latest milestone">
         <span class="milestone-tag">Latest milestone</span>
         <p>
-          The software stack now controls the throttle of a real golf cart, and three
-          failsafes stopped the wheels while they were turning.
+          On jackstands, the cart now holds a commanded speed. A sensor on the motor measures how fast the
+          wheels are turning, and the microcontroller adjusts the throttle until it matches.
         </p>
       </aside>
       <p class="caption">
@@ -61,7 +61,7 @@
         laptop turns the wheels at various speeds, with the cart on jackstands.
       </p>
       <p class="caption muted">
-        Next up: speed control and RTK&nbsp;GPS at the test site.
+        Now: soldering the electronics onto a permanent board. Next: braking.
       </p>
       <p class="caption muted visits" id="visits" hidden></p>
     </div>
@@ -122,7 +122,7 @@
 
       <div class="planned">
         <span class="planned-label">Planned</span>
-        <span class="chip">RTK GPS</span>
+        <span class="chip">RTK GPS on the cart</span>
         <span class="chip">Perception</span>
         <span class="chip">Steering actuator</span>
         <span class="chip">Brake actuator</span>
@@ -132,6 +132,8 @@
         Throttle path as built. The digital potentiometer imitates the cart's original
         resistive pedal sensor, so the stock controller sees exactly the signal it expects.
         When the relays lose power they drop out, and the cart goes back to its own pedal.
+        The loop closes through the cart's own motor speed sensor, which the
+        microcontroller reads to measure how fast the wheels are turning.
       </figcaption>
     </figure>
   </section>
@@ -230,7 +232,7 @@
             criterion was measured and passed.</p>
         </div>
       </li>
-      <li class="done highlight">
+      <li class="done">
         <div class="t-date">Sep 12, 2026</div>
         <div class="t-body">
           <h3>Stage 4: On the cart</h3>
@@ -238,20 +240,47 @@
             failsafes stopped them mid-motion, and afterward the cart was put back to stock.</p>
         </div>
       </li>
+      <li class="done highlight">
+        <div class="t-date">Sep 26, 2026</div>
+        <div class="t-body">
+          <h3>Commanded speed</h3>
+          <p>The microcontroller now reads the motor's speed sensor. Measuring how throttle
+            maps to wheel speed gave a simple linear fit, which the controller uses as its
+            first guess for any requested speed. A feedback loop corrects the rest. Tuned on
+            jackstands, it reaches a new speed in about half a second without oscillating.</p>
+        </div>
+      </li>
+      <li class="done">
+        <div class="t-date">Sep 27, 2026</div>
+        <div class="t-body">
+          <h3>RTK GPS at the test site</h3>
+          <p>A walked survey of the driving area held a centimeter-level fix for over 90% of
+            the run. With commanded speed, this closes the first milestone gate.</p>
+        </div>
+      </li>
+      <li class="next">
+        <div class="t-date">Now</div>
+        <div class="t-body">
+          <h3>A permanent board</h3>
+          <p>Moving the electronics off the breadboard and onto a soldered board powered by the
+            cart's own battery pack, so the cart can be tested on the ground rather than only on
+            jackstands.</p>
+        </div>
+      </li>
       <li class="next">
         <div class="t-date">Up next</div>
         <div class="t-body">
-          <h3>Commanded speed + RTK GPS</h3>
-          <p>Closed-loop speed control on jackstands, then centimeter-level positioning at the
-            test site. Both are required before the cart moves under its own control.</p>
+          <h3>Braking and e-stop</h3>
+          <p>The brake actuator is chosen and its control code is written, with bench testing
+            next. A hardwired e-stop with no processor in its path, then measured stopping
+            distances. The cart does not drive itself until all of this passes.</p>
         </div>
       </li>
       <li class="future">
         <div class="t-date">Later</div>
         <div class="t-body">
-          <h3>Steering, braking, autonomy</h3>
-          <p>Steering and brake actuators, a hardwired e-stop, and then the full autonomy stack
-            on the cart.</p>
+          <h3>Steering, autonomy</h3>
+          <p>The steering actuator, then the full autonomy stack on the cart.</p>
         </div>
       </li>
     </ol>
