@@ -36,9 +36,14 @@ ffmpeg -i raw/dbw_demo.MOV -vf "scale=-2:720" -c:v libx264 -crf 26 -preset slow 
 ffmpeg -i assets/dbw_demo.mp4 -ss 2 -frames:v 1 -q:v 3 assets/dbw_demo-poster.jpg
 ```
 
-Remove `-an` to keep sound. The page expects `assets/dbw_demo.mp4` and its poster.
+Remove `-an` to keep sound. The page expects `assets/brake_demo.mp4` and `assets/dbw_demo.mp4`, each with a `-poster.jpg`.
 
-**Photos** — re-encode with metadata stripped (add `-vf "scale=1600:-2"` for large originals):
+iPhone clips are often 10-bit HLG HDR. Add `-pix_fmt yuv420p` (or `format=yuv420p` in the filter chain), or browsers
+won't play the result; check `ffprobe` for `color_transfer=arib-std-b67` and compare a frame against the source.
+
+**Photos** — re-encode with metadata stripped (add `-vf "scale=1600:-2"` for large originals).
+iPhone HEICs carry GPS and must not go in `assets/`; keep them in `raw/` and convert first
+(`sips -s format jpeg -Z 1600 raw/x.HEIC --out x.jpg`, then the command below):
 
 ```bash
 ffmpeg -i raw/golfcart.jpeg -q:v 4 -map_metadata -1 assets/golfcart.jpg

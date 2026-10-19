@@ -43,27 +43,43 @@
 
   <!-- ============ DEMO ============ -->
   <section id="demo" class="teaser">
-    <video controls muted playsinline preload="metadata" poster="assets/dbw_demo-poster.jpg"
-           aria-label="Demo: the cart's wheels turning under software command">
-      <source src="assets/dbw_demo.mp4" type="video/mp4">
+    <video controls muted playsinline preload="metadata" poster="assets/brake_demo-poster.jpg"
+           aria-label="Demo: the cart's wheels spin up under software command, then a brake actuator presses the pedal">
+      <source src="assets/brake_demo.mp4" type="video/mp4">
     </video>
 
     <div class="teaser-text">
       <aside class="milestone" aria-label="Latest milestone">
         <span class="milestone-tag">Latest milestone</span>
         <p>
-          On jackstands, the cart now holds a commanded speed. A sensor on the motor measures how fast the
-          wheels are turning, and the microcontroller adjusts the throttle until it matches.
+          The soldered board is on the cart, and one program now drives both the throttle and a brake
+          actuator. A single command spins the wheels up to speed, then lets the throttle go and
+          presses the brake pedal. The two are interlocked: the brake will not press until the
+          throttle is at rest, and the throttle will not come back until the brake has let go.
         </p>
       </aside>
+      <p class="caption">
+        <strong>Speed, then brake, October 18, 2026.</strong> Testing the throttle and speed
+        chain after being integrated with the braking system.
+      </p>
+      <p class="caption muted">
+        Now: measured stopping tests. Next: a hardwired e-stop.
+      </p>
+      <p class="caption muted visits" id="visits" hidden></p>
+    </div>
+  </section>
+
+  <section class="teaser teaser-earlier" aria-label="Earlier demo">
+    <video controls muted playsinline preload="none" poster="assets/dbw_demo-poster.jpg"
+           aria-label="Earlier demo: the cart's wheels turning under software command">
+      <source src="assets/dbw_demo.mp4" type="video/mp4">
+    </video>
+
+    <div class="teaser-text">
       <p class="caption">
         <strong>First drive-by-wire, September 12, 2026.</strong> A command typed on the
         laptop turns the wheels at various speeds, with the cart on jackstands.
       </p>
-      <p class="caption muted">
-        Now: soldering the electronics onto a permanent board. Next: braking.
-      </p>
-      <p class="caption muted visits" id="visits" hidden></p>
     </div>
   </section>
 
@@ -125,7 +141,6 @@
         <span class="chip">RTK GPS on the cart</span>
         <span class="chip">Perception</span>
         <span class="chip">Steering actuator</span>
-        <span class="chip">Brake actuator</span>
         <span class="chip">Hardwired e-stop</span>
       </div>
       <figcaption>
@@ -134,6 +149,8 @@
         When the relays lose power they drop out, and the cart goes back to its own pedal.
         The loop closes through the cart's own motor speed sensor, which the
         microcontroller reads to measure how fast the wheels are turning.
+        Braking is a separate path: a linear actuator presses the brake pedal directly, and the
+        microcontroller reads its position back. It pushes on the pedal but is never attached to it.
       </figcaption>
     </figure>
   </section>
@@ -167,6 +184,12 @@
           stock controller stops the cart, whatever the software is commanding.</p>
       </article>
     </div>
+    <p>
+      The brake follows the same rules. It cannot press while the throttle is open, and it has
+      to let go before the throttle can return. If the link to the computer drops, the brake
+      holds where it is instead of letting go, a choice that gets revisited before any test on
+      the ground.
+    </p>
   </section>
 
   <!-- ============ GALLERY ============ -->
@@ -187,6 +210,21 @@
         <img src="assets/jacob_with_golfcart.jpg" loading="lazy"
              alt="Jacob giving a thumbs up behind the cart, with the breadboard and laptop on the floorboard">
         <figcaption>Test day</figcaption>
+      </figure>
+      <figure>
+        <img src="assets/carrier_board.jpg" loading="lazy"
+             alt="A soldered prototype board with a Teensy microcontroller, relays and terminal blocks, sitting on the cart's rear floor among zip-tied wiring, with the battery pack above">
+        <figcaption>The soldered board, on the cart</figcaption>
+      </figure>
+      <figure>
+        <img src="assets/brake_actuator.jpg" loading="lazy"
+             alt="A linear actuator bolted to a wooden plate on the cart's floor, its rod pointing at the brake pedal">
+        <figcaption>The brake actuator, test-fit against the pedal</figcaption>
+      </figure>
+      <figure>
+        <img src="assets/jacob_under_cart.jpg" loading="lazy"
+             alt="Jacob sitting beside the cart with a laptop, seen under the cart bed, with the electronics bay visible behind">
+        <figcaption>Running a test from the laptop</figcaption>
       </figure>
     </div>
   </section>
@@ -240,7 +278,7 @@
             failsafes stopped them mid-motion, and afterward the cart was put back to stock.</p>
         </div>
       </li>
-      <li class="done highlight">
+      <li class="done">
         <div class="t-date">Sep 26, 2026</div>
         <div class="t-body">
           <h3>Commanded speed</h3>
@@ -258,22 +296,39 @@
             the run. With commanded speed, this closes the first milestone gate.</p>
         </div>
       </li>
+      <li class="done">
+        <div class="t-date">Oct 18, 2026</div>
+        <div class="t-body">
+          <h3>A permanent board</h3>
+          <p>The electronics moved off the breadboard onto a soldered board, and it went on the
+            cart. The wheels turned under commanded speed again, and the failsafes held: cutting
+            relay power stopped them, and the link-loss cutoff fired within about a tenth of a
+            second. It was still powered from a lab supply.</p>
+        </div>
+      </li>
+      <li class="partial highlight">
+        <div class="t-date">Oct 4 – 18, 2026</div>
+        <div class="t-body">
+          <h3>Braking: the actuator</h3>
+          <p>A linear actuator presses the brake pedal. It was brought up the same way as the
+            throttle: on the bench, test-fit on the cart, then added to the cart's firmware. The
+            speed-then-brake sequence now runs from one command, interlocked with the throttle.</p>
+        </div>
+      </li>
       <li class="next">
         <div class="t-date">Now</div>
         <div class="t-body">
-          <h3>A permanent board</h3>
-          <p>Moving the electronics off the breadboard and onto a soldered board powered by the
-            cart's own battery pack, so the cart can be tested on the ground rather than only on
-            jackstands.</p>
+          <h3>Measured stopping tests</h3>
+          <p>Measuring how the cart stops, with a first holding test, and running everything from
+            the cart's own battery pack.</p>
         </div>
       </li>
       <li class="next">
         <div class="t-date">Up next</div>
         <div class="t-body">
-          <h3>Braking and e-stop</h3>
-          <p>The brake actuator is chosen and its control code is written, with bench testing
-            next. A hardwired e-stop with no processor in its path, then measured stopping
-            distances. The cart does not drive itself until all of this passes.</p>
+          <h3>Hardwired e-stop</h3>
+          <p>An e-stop with no processor in its path. The cart does not drive itself until all
+            of this passes.</p>
         </div>
       </li>
       <li class="future">
