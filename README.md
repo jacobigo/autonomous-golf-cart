@@ -36,10 +36,13 @@ ffmpeg -i raw/dbw_demo.MOV -vf "scale=-2:720" -c:v libx264 -crf 26 -preset slow 
 ffmpeg -i assets/dbw_demo.mp4 -ss 2 -frames:v 1 -q:v 3 assets/dbw_demo-poster.jpg
 ```
 
-Remove `-an` to keep sound. The page expects `assets/brake_demo.mp4` and `assets/dbw_demo.mp4`, each with a `-poster.jpg`.
+Remove `-an` to keep sound. The page expects `assets/pov_ground_tests.mp4`, `assets/brake_demo.mp4` and `assets/dbw_demo.mp4`, each with a `-poster.jpg`.
 
 iPhone clips are often 10-bit HLG HDR. Add `-pix_fmt yuv420p` (or `format=yuv420p` in the filter chain), or browsers
 won't play the result; check `ffprobe` for `color_transfer=arib-std-b67` and compare a frame against the source.
+This ffmpeg has no `zscale`; the November clip used `-vf "scale=-2:1280,colorspace=all=bt709:iall=bt2020:itrc=bt709:format=yuv420p"`
+plus `-map 0:v:0 -an -map_metadata -1` (a plain `format=yuv420p` looks washed out). Phone clips also carry GPS in
+the container, which `-map_metadata -1` removes.
 
 **Photos** — re-encode with metadata stripped (add `-vf "scale=1600:-2"` for large originals).
 iPhone HEICs carry GPS and must not go in `assets/`; keep them in `raw/` and convert first

@@ -43,29 +43,46 @@
 
   <!-- ============ DEMO ============ -->
   <section id="demo" class="teaser">
-    <video controls muted playsinline preload="metadata" poster="assets/brake_demo-poster.jpg"
-           aria-label="Demo: the cart's wheels spin up under software command, then a brake actuator presses the pedal">
-      <source src="assets/brake_demo.mp4" type="video/mp4">
+    <video controls muted playsinline preload="metadata" poster="assets/pov_ground_tests-poster.jpg"
+           aria-label="First-person walk around the cart on test day: the electronics bay, the brake actuator on the floor, the e-stop button, and the laptop running the test">
+      <source src="assets/pov_ground_tests.mp4" type="video/mp4">
     </video>
 
     <div class="teaser-text">
       <aside class="milestone" aria-label="Latest milestone">
         <span class="milestone-tag">Latest milestone</span>
         <p>
-          The soldered board is on the cart, and one program now drives both the throttle and a brake
-          actuator. A single command spins the wheels up to speed, then lets the throttle go and
-          presses the brake pedal. The two are interlocked: the brake will not press until the
-          throttle is at rest, and the throttle will not come back until the brake has let go.
+          The wheels are on the ground. After a second cart took over the project, the same
+          throttle, brake and e-stop were repeated on jackstands, and then the cart drove for the first time:
+          short forward runs at a slow walking pace, with a safety driver on board. The
+          computer held the commanded speed, stopped the cart with the brake, and the e-stop and the
+          link-loss cutoff were both tested with the cart rolling.
         </p>
       </aside>
       <p class="caption">
-        <strong>Speed, then brake, October 18, 2026.</strong> Testing the throttle and speed
-        chain after being integrated with the braking system.
+        <strong>Test day, November 11, 2026.</strong> A first-person walk around the cart: the
+        electronics bay, the brake actuator on the floor, the e-stop button, and the laptop
+        that runs the tests. The cart does not move in this clip.
       </p>
       <p class="caption muted">
-        Now: measured stopping tests. Next: a hardwired e-stop.
+        Now: steering. Then: measuring the stops properly.
       </p>
       <p class="caption muted visits" id="visits" hidden></p>
+    </div>
+  </section>
+
+  <section class="teaser teaser-earlier" aria-label="Earlier demo: speed, then brake">
+    <video controls muted playsinline preload="none" poster="assets/brake_demo-poster.jpg"
+           aria-label="Earlier demo: the cart's wheels spin up under software command, then a brake actuator presses the pedal">
+      <source src="assets/brake_demo.mp4" type="video/mp4">
+    </video>
+
+    <div class="teaser-text">
+      <p class="caption">
+        <strong>Speed, then brake, October 18, 2026.</strong> The throttle and speed chain
+        after being integrated with the braking system, on jackstands. One command spins the
+        wheels up, lets the throttle go, and presses the brake pedal.
+      </p>
     </div>
   </section>
 
@@ -141,7 +158,7 @@
         <span class="chip">RTK GPS on the cart</span>
         <span class="chip">Perception</span>
         <span class="chip">Steering actuator</span>
-        <span class="chip">Hardwired e-stop</span>
+        <span class="chip">Wireless e-stop</span>
       </div>
       <figcaption>
         Throttle path as built. The digital potentiometer imitates the cart's original
@@ -187,8 +204,9 @@
     <p>
       The brake follows the same rules. It cannot press while the throttle is open, and it has
       to let go before the throttle can return. If the link to the computer drops, the brake
-      holds where it is instead of letting go, a choice that gets revisited before any test on
-      the ground.
+      holds where it is instead of letting go. On the ground that means a dropped link makes the
+      cart coast with the brake not applied, so for now the safety driver's foot is the stop. Whether the
+      brake should apply instead is still an open choice.
     </p>
   </section>
 
@@ -306,7 +324,7 @@
             second. It was still powered from a lab supply.</p>
         </div>
       </li>
-      <li class="partial highlight">
+      <li class="done">
         <div class="t-date">Oct 4 – 18, 2026</div>
         <div class="t-body">
           <h3>Braking: the actuator</h3>
@@ -315,27 +333,55 @@
             speed-then-brake sequence now runs from one command, interlocked with the throttle.</p>
         </div>
       </li>
+      <li class="done">
+        <div class="t-date">Nov 4 – 8, 2026</div>
+        <div class="t-body">
+          <h3>A second cart</h3>
+          <p>In early November the first cart stopped running on its own pedal, so a second
+            Yamaha G22E of the same model became the thesis vehicle. The electronics, the brake
+            actuator and a latching e-stop button moved over, running from the cart's own battery
+            pack, and the jackstand tests were repeated from the start: throttle, brake, and
+            the interlock between them. Everything measured on the first cart is kept separate,
+            because it is a different machine.</p>
+        </div>
+      </li>
+      <li class="partial highlight">
+        <div class="t-date">Nov 11, 2026</div>
+        <div class="t-body">
+          <h3>First ground tests</h3>
+          <p>Short forward runs at a slow walking pace, with a safety driver steering by hand and
+            ready to brake. The speed loop was retuned for a cart carrying its own weight and held
+            the commanded speed to about a tenth of a meter per second. The brake that held an
+            unloaded wheel on jackstands did not stop a rolling cart at first, and needed the
+            linkage tightened and more pedal travel. It now stops the cart in about two to three
+            seconds from the speeds tested, a little over a meter, though that distance is
+            still a rough, tape-measured estimate. Pressing the e-stop lets the cart coast
+            to a stop, and then the brake applies and holds. Pulling the USB cable mid-run
+            dropped the throttle, as the watchdog is meant to, with the cart rolling.</p>
+        </div>
+      </li>
       <li class="next">
         <div class="t-date">Now</div>
         <div class="t-body">
-          <h3>Measured stopping tests</h3>
-          <p>Measuring how the cart stops, with a first holding test, and running everything from
-            the cart's own battery pack.</p>
+          <h3>Steering</h3>
+          <p>Until a steering actuator is in, a person steers. Several known rough edges, such as a
+            brake that takes a second or two to bite, are deliberately left until steering is
+            integrated.</p>
         </div>
       </li>
       <li class="next">
         <div class="t-date">Up next</div>
         <div class="t-body">
-          <h3>Hardwired e-stop</h3>
-          <p>An e-stop with no processor in its path. The cart does not drive itself until all
-            of this passes.</p>
+          <h3>Stopping, measured properly</h3>
+          <p>A faster brake, stopping distances measured against GPS rather than a tape, and
+            a wireless e-stop. The cart does not drive itself until all of this passes.</p>
         </div>
       </li>
       <li class="future">
         <div class="t-date">Later</div>
         <div class="t-body">
-          <h3>Steering, autonomy</h3>
-          <p>The steering actuator, then the full autonomy stack on the cart.</p>
+          <h3>Perception, autonomy</h3>
+          <p>Perception, then the full autonomy stack on the cart.</p>
         </div>
       </li>
     </ol>
@@ -346,8 +392,10 @@
     <h2>A note on safety</h2>
     <p>
       This is a research platform tested on private property, with a safety operator present
-      and speeds capped. It is not intended for public roads. All testing to date has been
-      done with the drive wheels off the ground.
+      and speeds capped. It is not intended for public roads. Until November 11, 2026, every
+      test was done with the drive wheels off the ground. Ground testing has since begun: flat,
+      dry, forward-only at a slow walking pace, with a safety driver on board who steers and
+      can brake by foot, and an e-stop button within reach.
     </p>
   </section>
 
